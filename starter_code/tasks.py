@@ -1,5 +1,6 @@
-from crewai import Task
 from textwrap import dedent
+
+from crewai import Task
 
 
 class MeetingTasks:
@@ -18,7 +19,7 @@ class MeetingTasks:
             expected_output="A list of names.",
             agent=agent,
             tools=[],
-            context=[]
+            context=[],
         )
 
     def collect_action_items(self, agent):
@@ -27,5 +28,5 @@ class MeetingTasks:
             expected_output="A list of items.",
             agent=agent,
             tools=[],
-            context=[]
+            context=[],
         )

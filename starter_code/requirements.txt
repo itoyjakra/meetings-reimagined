@@ -2,3 +2,5 @@ crewai
 crewai_tools
 langchain
 langchain-community
+langchain-groq
+duckduckgo-search
