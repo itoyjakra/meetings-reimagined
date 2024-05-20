@@ -1,6 +1,7 @@
 import os
 from textwrap import dedent
 
+import agentops
 from agents import MeetingAgents
 from crewai import Agent, Crew, Process, Task
 from dotenv import load_dotenv
@@ -21,7 +22,8 @@ class MeetingCrew:
 
     def run(self):
         # agents = MeetingAgents(temperature=0.7, model_str="groq-llama3")
-        agents = MeetingAgents(temperature=0.7, model_str="openai-gpt-4")
+        agents = MeetingAgents(temperature=0.5, model_str="openai-gpt-4")
+        # agents = MeetingAgents(temperature=0.7, model_str="ollama-llama3")
         tasks = MeetingTasks()
 
         # Agents
@@ -58,6 +60,7 @@ class MeetingCrew:
 
 if __name__ == "__main__":
     load_dotenv()
+    agentops.init(tags=["crewai", "meeting"], api_key=os.getenv("AGENTOPS_API_KEY"))
 
     print("## Welcome to Crew AI Template")
     print("-------------------------------")

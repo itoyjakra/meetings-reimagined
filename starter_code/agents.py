@@ -6,8 +6,9 @@ from crewai_tools import FileReadTool
 from langchain.llms import Ollama, OpenAI
 from langchain_groq import ChatGroq
 from langchain_openai import ChatOpenAI
+from loguru import logger
 
-transcription_reader = FileReadTool(file_path="./meetings/topic1/2024-05-04.txt")
+transcription_reader = FileReadTool(file_path="./meetings/topic1/2024-05-11.txt")
 
 
 class MeetingAgents:
@@ -15,24 +16,37 @@ class MeetingAgents:
         self.OpenAIGPT35 = ChatOpenAI(
             model_name="gpt-3.5-turbo", temperature=temperature
         )
-        self.OpenAIGPT4 = ChatOpenAI(model_name="gpt-4", temperature=temperature)
+        self.OpenAIGPT4 = ChatOpenAI(model_name="gpt-4o", temperature=temperature)
         self.Ollama = Ollama(model="openhermes")
         self.GROQ_LLM = ChatGroq(
             model="llama3-70b-8192",
             api_key=os.getenv("GROQ_API_KEY"),
             temperature=temperature,
         )
+        self.OLLAMA_LLM = ChatOpenAI(
+            model="crewai-llama3:80b", base_url="http://localhost:11434/v1"
+        )
         self.model_str = model_str
 
     @property
     def llm(self):
         if re.search("openai", self.model_str, re.IGNORECASE):
+            logger.debug(f"Using OpenAI model: {self.model_str}")
             if "gpt-3.5-turbo" in self.model_str:
+                logger.debug(f"Using OpenAI GPT-3.5-turbo")
                 return self.OpenAIGPT35
             elif "gpt-4" in self.model_str:
+                logger.debug(f"Using OpenAI GPT-4")
                 return self.OpenAIGPT4
+
         if "groq" in self.model_str and "llama3" in self.model_str:
+            logger.debug(f"Using GROQ model: {self.model_str}")
             return self.GROQ_LLM
+
+        if "ollama" in self.model_str and "llama3" in self.model_str:
+            logger.debug(f"Using OLLAMA model: {self.model_str}")
+            os.environ["OPENAI_API_KEY"] = "NA"
+            return self.OLLAMA_LLM
 
     def summarizer(self):
         return Agent(
