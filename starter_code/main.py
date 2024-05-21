@@ -6,6 +6,7 @@ from agents import MeetingAgents
 from crewai import Agent, Crew, Process, Task
 from dotenv import load_dotenv
 from langchain_openai import ChatOpenAI
+from llms import LLMConfig
 from tasks import MeetingTasks
 
 # Install duckduckgo-search for this example:
@@ -17,13 +18,15 @@ from tasks import MeetingTasks
 
 
 class MeetingCrew:
-    def __init__(self, summary_num_words: int):
+    def __init__(self, llm, summary_num_words: int = 200):
+        self.llm = llm
         self.summary_num_words = summary_num_words
 
     def run(self):
         # agents = MeetingAgents(temperature=0.7, model_str="groq-llama3")
-        agents = MeetingAgents(temperature=0.5, model_str="openai-gpt-4")
+        # agents = MeetingAgents(temperature=0.5, model_str="openai-gpt-4")
         # agents = MeetingAgents(temperature=0.7, model_str="ollama-llama3")
+        agents = MeetingAgents(temperature=0.5, llm_model=self.llm)
         tasks = MeetingTasks()
 
         # Agents
@@ -61,13 +64,15 @@ class MeetingCrew:
 if __name__ == "__main__":
     load_dotenv()
     agentops.init(tags=["crewai", "meeting"], api_key=os.getenv("AGENTOPS_API_KEY"))
+    llm_config = LLMConfig(platform="openai", model="gpt-4o")
+    llm_model = llm_config.get_llm_model()
 
     print("## Welcome to Crew AI Template")
     print("-------------------------------")
     num_words = input(dedent("""Enter number of words in meeting summary: """))
     num_words = int(num_words)
 
-    crew = MeetingCrew(num_words)
+    crew = MeetingCrew(llm=llm_model, summary_num_words=num_words)
     result = crew.run()
     print("\n\n########################")
     print("## Here is the meeting crew run result:")

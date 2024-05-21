@@ -12,7 +12,10 @@ transcription_reader = FileReadTool(file_path="./meetings/topic1/2024-05-11.txt"
 
 
 class MeetingAgents:
-    def __init__(self, model_str: str = "gpt-3.5-turbo", temperature: float = 0.5):
+    def __init__(
+        self, llm_model, model_str: str = "gpt-3.5-turbo", temperature: float = 0.5
+    ):
+        self.llm_model = llm_model
         self.OpenAIGPT35 = ChatOpenAI(
             model_name="gpt-3.5-turbo", temperature=temperature
         )
@@ -62,7 +65,7 @@ class MeetingAgents:
             allow_delegation=False,
             verbose=True,
             # llm=self.OpenAIGPT4,
-            llm=self.llm,
+            llm=self.llm_model,
         )
 
     def participant_tracker(self):
@@ -80,7 +83,7 @@ class MeetingAgents:
             allow_delegation=False,
             verbose=True,
             # llm=self.OpenAIGPT4,
-            llm=self.llm,
+            llm=self.llm_model,
         )
 
     def action_items_tracker(self):
@@ -100,5 +103,5 @@ class MeetingAgents:
             allow_delegation=False,
             verbose=True,
             # llm=self.OpenAIGPT4,
-            llm=self.llm,
+            llm=self.llm_model,
         )
