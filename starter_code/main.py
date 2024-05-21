@@ -23,9 +23,6 @@ class MeetingCrew:
         self.summary_num_words = summary_num_words
 
     def run(self):
-        # agents = MeetingAgents(temperature=0.7, model_str="groq-llama3")
-        # agents = MeetingAgents(temperature=0.5, model_str="openai-gpt-4")
-        # agents = MeetingAgents(temperature=0.7, model_str="ollama-llama3")
         agents = MeetingAgents(temperature=0.5, llm_model=self.llm)
         tasks = MeetingTasks()
 
