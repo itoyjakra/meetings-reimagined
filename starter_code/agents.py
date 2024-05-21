@@ -2,19 +2,18 @@ import os
 import re
 
 from crewai import Agent
-from crewai_tools import FileReadTool
+from crewai_tools import DirectoryReadTool, FileReadTool
 from langchain.llms import Ollama, OpenAI
 from langchain_groq import ChatGroq
 from langchain_openai import ChatOpenAI
 from loguru import logger
 
 transcription_reader = FileReadTool(file_path="./meetings/topic1/2024-05-11.txt")
+directory_reader = DirectoryReadTool(directory="./meetings/topic1")
 
 
 class MeetingAgents:
-    def __init__(
-        self, llm_model, temperature: float = 0.5
-    ):
+    def __init__(self, llm_model):
         self.llm_model = llm_model
 
     def summarizer(self):
@@ -69,5 +68,23 @@ class MeetingAgents:
             allow_delegation=False,
             verbose=True,
             # llm=self.OpenAIGPT4,
+            llm=self.llm_model,
+        )
+
+    def answer_finder(self):
+        return Agent(
+            role="Finds answers from documents.",
+            backstory=(
+                "You are an expert RAG agent who finds the answer to the "
+                "question. If the question is ambiguous you say so. If the "
+                "answer is not found in any of the documents provided to you "
+                "you say so. When you provide an answer, it is always grounded "
+                "in one of the documents and you can point the user to the "
+                "relevant section of the document."
+            ),
+            goal="Provides an answer grounded in the documents to the question.",
+            tools=[directory_reader, transcription_reader],
+            allow_delegation=False,
+            verbose=True,
             llm=self.llm_model,
         )

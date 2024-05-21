@@ -22,14 +22,15 @@ class MeetingCrew:
         self.llm = llm
         self.summary_num_words = summary_num_words
 
-    def run(self):
-        agents = MeetingAgents(temperature=0.5, llm_model=self.llm)
+    def run(self, question):
+        agents = MeetingAgents(llm_model=self.llm)
         tasks = MeetingTasks()
 
         # Agents
         summarizer_agent = agents.summarizer()
         participant_tracker_agent = agents.participant_tracker()
         action_item_tracker_agent = agents.action_items_tracker()
+        rag_agent = agents.answer_finder()
 
         # Tasks
         summarize_task = tasks.summarize(
@@ -41,7 +42,11 @@ class MeetingCrew:
             participant_tracker_agent,
         )
 
-        collect_action_items = tasks.collect_action_items(action_item_tracker_agent)
+        collect_action_items = tasks.collect_action_items(
+            action_item_tracker_agent, context=[summarize_task, track_participants_task]
+        )
+
+        get_answers = tasks.rag_search(rag_agent, question=question)
 
         # Crew
         crew = Crew(
@@ -49,8 +54,14 @@ class MeetingCrew:
                 summarizer_agent,
                 participant_tracker_agent,
                 action_item_tracker_agent,
+                rag_agent,
             ],
-            tasks=[summarize_task, track_participants_task, collect_action_items],
+            tasks=[
+                summarize_task,
+                track_participants_task,
+                collect_action_items,
+                get_answers,
+            ],
             verbose=True,
         )
 
@@ -70,7 +81,10 @@ if __name__ == "__main__":
     num_words = int(num_words)
 
     crew = MeetingCrew(llm=llm_model, summary_num_words=num_words)
-    result = crew.run()
+    qq = "when is instruction fine tuning required?"
+    qq = "What is PEFT?"
+    qq = "When was Andrew born?"
+    result = crew.run(question=qq)
     print("\n\n########################")
     print("## Here is the meeting crew run result:")
     print("########################\n")
