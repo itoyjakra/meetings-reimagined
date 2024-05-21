@@ -1,0 +1,27 @@
+{
+    "summarize": {
+        "description": "Summarize the transcription of the meeting",
+        "expected_output": "A summary of the meeting.",
+        "async_execution": true
+    },
+    "track_participation": {
+        "description": "Identify the participants of the meeting.",
+        "expected_output": "A list of names.",
+        "async_execution": true
+    },
+    "collect_action_items": {
+        "description": "Identify the action items to be performed before the next meeting.",
+        "expected_output": "A list of items.",
+        "async_execution": false
+    },
+    "track_qna": {
+        "description": "Identify the questions asked by a participant and corresponding answers.",
+        "expected_output": "A list of question and answer pair",
+        "async_execution": false
+    },
+    "answer_questions": {
+        "description": "Answer the question.",
+        "expected_output": "An answer to the question, or a mention that documents don't contain the answer.",
+        "async_execution": false
+    }
+}
