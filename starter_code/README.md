@@ -29,6 +29,11 @@ Navigate to the project directory and install the required Python packages using
 
 ### API Keys
 
+### API Keys
+
+Sign up for an AgentOps account at [https://app.agentops.ai/start](https://app.agentops.ai/start) to obtain your API key. 
+
+
 Copy the `.env.template` file into a new file `.env` in the root of your project directory to store your API keys securely. Keep the following keys only:
 
 ```
