@@ -11,12 +11,12 @@
     },
     "collect_action_items": {
         "description": "Identify the action items to be performed before the next meeting.",
-        "expected_output": "A list of items.",
+        "expected_output": "A list of items in JSON format.",
         "async_execution": false
     },
     "track_qna": {
         "description": "Identify the questions asked by a participant and corresponding answers.",
-        "expected_output": "A list of question and answer pair",
+        "expected_output": "A list of question and answer pair in JSON format. Each question should include the name of the person who is asking the question.  Each answer should include the name of the person answering the question.",
         "async_execution": false
     },
     "answer_questions": {
