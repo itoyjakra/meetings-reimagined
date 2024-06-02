@@ -71,8 +71,13 @@ class MeetingCrew:
 
 if __name__ == "__main__":
     load_dotenv()
-    agentops.init(tags=["crewai", "meeting"], api_key=os.getenv("AGENTOPS_API_KEY"))
-    llm_config = LLMConfig(platform="openai", model="gpt-4o")
+    if os.getenv("AGENTOPS_API_KEY"):
+        agentops.init(tags=["crewai", "meeting"], api_key=os.getenv("AGENTOPS_API_KEY"))
+
+    #llm_config = LLMConfig(platform="openai", model="gpt-4o")
+    llm_config = LLMConfig(
+        platform="bedrock", model="anthropic.claude-3-sonnet-20240229-v1:0"
+    )
     llm_model = llm_config.get_llm_model()
 
     print("## Welcome to Crew AI Template")
@@ -83,7 +88,7 @@ if __name__ == "__main__":
     crew = MeetingCrew(llm=llm_model, summary_num_words=num_words)
     qq = "when is instruction fine tuning required?"
     qq = "What is PEFT?"
-    qq = "When was Andrew born?"
+    # qq = "When was Andrew born?"
     result = crew.run(question=qq)
     print("\n\n########################")
     print("## Here is the meeting crew run result:")

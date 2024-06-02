@@ -1,6 +1,7 @@
 crewai
 crewai_tools
 langchain
+langchain-aws
 langchain-community
 langchain-groq
 duckduckgo-search

@@ -1,5 +1,5 @@
 """
-This module defines a LLMConfig class for configuring different 
+This module defines a LLMConfig class for configuring different
 language models for various platforms.
 """
 
@@ -7,7 +7,9 @@ import os
 
 from langchain_groq import ChatGroq
 from langchain_openai import ChatOpenAI
+from langchain_aws import ChatBedrock
 from pydantic import BaseModel
+import boto3
 
 
 class LLMConfig(BaseModel):
@@ -33,6 +35,14 @@ class LLMConfig(BaseModel):
         if self.platform.lower() == "ollama":
             os.environ["OPENAI_API_KEY"] = "NA"
             return ChatOpenAI(model=self.model, base_url="http://localhost:11434/v1")
+
+        if self.platform.lower() == "bedrock":
+            bedrock_client = boto3.client("bedrock-runtime")
+            return ChatBedrock(
+                model_id=self.model,
+                model_kwargs={"temperature": 0.6},
+                client=bedrock_client,
+            )
 
 
 # # Example usage:
