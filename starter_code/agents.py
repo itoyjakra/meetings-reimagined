@@ -3,7 +3,7 @@ import re
 
 from crewai import Agent
 from crewai_tools import DirectoryReadTool, FileReadTool
-from langchain.llms import Ollama, OpenAI
+#from langchain.llms import Ollama, OpenAI
 from langchain_groq import ChatGroq
 from langchain_openai import ChatOpenAI
 from loguru import logger
