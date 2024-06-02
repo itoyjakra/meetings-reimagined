@@ -3,12 +3,13 @@ import re
 
 from crewai import Agent
 from crewai_tools import DirectoryReadTool, FileReadTool
-#from langchain.llms import Ollama, OpenAI
 from langchain_groq import ChatGroq
 from langchain_openai import ChatOpenAI
 from loguru import logger
 
-transcription_reader = FileReadTool(file_path="./meetings/topic1/2024-05-11.txt")
+transcription_reader = FileReadTool(
+    file_path="./meetings/topic1/2024-05-11/transcription/trans.txt"
+)
 directory_reader = DirectoryReadTool(directory="./meetings/topic1")
 
 
